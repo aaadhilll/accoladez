@@ -18,7 +18,11 @@ class HomePage extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextButton(
+            child: OutlinedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0))),
+              ),
               onPressed: () async {
                 // await Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => ProfilePage()));
@@ -28,7 +32,10 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => LoginPage()),
                     (Route<dynamic> route) => false);
               },
-              child: const Text('Log Out'),
+              child: const Text(
+                'Log Out',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           )
         ],
@@ -39,22 +46,30 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('User successfully loged in'),
-          ElevatedButton(
-              onPressed: () async {
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: ElevatedButtons(
+              onTap: () async {
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CurrentLocationScr()));
               },
-              child: const Text('Current Location')),
-          ElevatedButton(
-              onPressed: () async {
+              test: 'Google Map',
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: ElevatedButtons(
+              onTap: () async {
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => WeatherDateScreen()));
               },
-              child: const Text('REST API for checking weather '))
+              test: 'REST API for checking weather ',
+            ),
+          ),
         ],
       ))),
     );

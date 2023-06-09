@@ -29,9 +29,7 @@ class WeatherDateScreen extends StatelessWidget {
                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                 label: Padding(
                   padding: EdgeInsets.only(left: 11),
-                  child: Text(
-                    'Enter name of the city',
-                  ),
+                  child: BlkTest(test: 'Enter name of the city'),
                 ),
                 // enabledBorder: OutlineInputBorder(
                 //   borderRadius: BorderRadius.circular(15),
@@ -49,7 +47,7 @@ class WeatherDateScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Back')),
+                    child: BlkTest(test: 'Back')),
                 ElevatedButton(
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all<Size>(
@@ -62,7 +60,9 @@ class WeatherDateScreen extends StatelessWidget {
                           .read<WeatherBloc>()
                           .add(WeatherDetialsEvent(cityName: _controller.text));
                     },
-                    child: Text('Search')),
+                    child: BlkTest(
+                      test: 'Search',
+                    )),
               ],
             ),
             BlocBuilder<WeatherBloc, WeatherState>(
@@ -114,6 +114,19 @@ class WeatherDateScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BlkTest extends StatelessWidget {
+  const BlkTest({super.key, required this.test});
+  final String test;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      test,
+      style: TextStyle(color: Colors.black),
     );
   }
 }

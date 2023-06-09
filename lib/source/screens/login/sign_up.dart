@@ -56,6 +56,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             'Email',
                           ),
                         ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(
@@ -73,6 +80,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (value!.isEmpty) {
                           return 'Please enter password';
                         }
+                        if (value.length < 6) {
+                          return 'Password must be minimum 6 charecters';
+                        }
                         return null;
                       },
                       controller: _password,
@@ -83,6 +93,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           padding: EdgeInsets.only(left: 11),
                           child: Text(
                             'Password',
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.black,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
@@ -116,6 +133,19 @@ class _SignUpPageState extends State<SignUpPage> {
                             print('Error');
                           }
                         }),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0))),
+                    ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Back',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                 ],
               ),

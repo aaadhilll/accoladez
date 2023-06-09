@@ -4,6 +4,7 @@ import 'package:accolades/source/screens/login/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../firebase_services/google_auth.dart';
 
@@ -61,6 +62,13 @@ class _LoginPageState extends State<LoginPage> {
                             'Email',
                           ),
                         ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(
@@ -78,6 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                         if (value!.isEmpty) {
                           return 'Please enter password';
                         }
+                        if (value.length < 6) {
+                          return 'Password must be minimum 6 charecters';
+                        }
                         return null;
                       },
                       controller: _password,
@@ -88,6 +99,13 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.only(left: 11),
                           child: Text(
                             'Password',
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.black,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
@@ -106,9 +124,25 @@ class _LoginPageState extends State<LoginPage> {
                         test: 'Log in',
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            FirebaseAuth.instance.signInWithEmailAndPassword(
-                                email: _userEmail.text.trim(),
-                                password: _password.text.trim());
+                            await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: _userEmail.text.trim(),
+                                    password: _password.text.trim());
+
+                            // print('#########');
+                            // print(FirebaseAuth.instance.authStateChanges());
+                            StreamBuilder<User?>(
+                              stream: FirebaseAuth.instance.authStateChanges(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return const HomePage();
+                                } else {
+                                  Fluttertoast.showToast(msg: 'Please enter');
+                                  return LoginPage();
+                                }
+                              },
+                              // child: LoginPage()
+                            );
                           } else {
                             print('Error');
                           }
@@ -133,7 +167,9 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: const Text(
                               "Sign Up",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ))
                       ],
                     ),
@@ -156,9 +192,16 @@ class _LoginPageState extends State<LoginPage> {
                   // ),
                   GestureDetector(
                     onTap: () async {
-                      await GoogleAuthClass().singnInGoogle();
-                      await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
+                      // await GoogleAuthClass().singnInGoogle();
+                      // await Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => HomePage()));
+                      await Fluttertoast.showToast(
+                          msg: 'Loading...', timeInSecForIosWeb: 10);
+                      await GoogleAuthClass().singnInGoogle().then((value) =>
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (_) {
+                            return HomePage();
+                          })));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -177,13 +220,16 @@ class _LoginPageState extends State<LoginPage> {
                               left: MediaQuery.of(context).size.width / 7),
                           child: Row(
                             children: [
-                              ClipOval(
-                                child: Image.network(
-                                    "https://image.similarpng.com/very-thumbnail/2020/12/Colorful-google-logo-design-on-transparent-PNG-1.png"),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipOval(
+                                  child: Image.network(
+                                      "https://image.similarpng.com/very-thumbnail/2020/12/Colorful-google-logo-design-on-transparent-PNG-1.png"),
+                                ),
                               ),
                               const Text(
                                 '   Sign in with google',
-                                style: TextStyle(fontSize: 21),
+                                style: TextStyle(fontSize: 17),
                               )
                             ],
                           ),
@@ -215,8 +261,12 @@ class ElevatedButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onTap,
-      child: Text(test),
+      child: Text(
+        test,
+        style: TextStyle(color: Colors.white),
+      ),
       style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.black),
         fixedSize: MaterialStateProperty.all<Size>(
           Size(MediaQuery.of(context).size.width / 0.8,
               MediaQuery.of(context).size.width / 9),
