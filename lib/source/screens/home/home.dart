@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
               child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('User successfully loged in'),
+          Text('User successfully logged In'),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: ElevatedButtons(

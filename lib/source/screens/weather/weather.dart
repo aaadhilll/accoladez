@@ -13,105 +13,107 @@ class WeatherDateScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text('Weather details'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextFormField(
-              // validator: (value) {
-              //   if (value!.isEmpty) {
-              //     return 'Please enter password';
-              //   }
-              //   return null;
-              // },
-              controller: _controller,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                label: Padding(
-                  padding: EdgeInsets.only(left: 11),
-                  child: BlkTest(test: 'Enter name of the city'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextFormField(
+                // validator: (value) {
+                //   if (value!.isEmpty) {
+                //     return 'Please enter password';
+                //   }
+                //   return null;
+                // },
+                controller: _controller,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  label: Padding(
+                    padding: EdgeInsets.only(left: 11),
+                    child: BlkTest(test: 'Enter name of the city'),
+                  ),
+                  // enabledBorder: OutlineInputBorder(
+                  //   borderRadius: BorderRadius.circular(15),
+                  //   borderSide: const BorderSide(
+                  //     width: 1,
+                  //     color: Colors.black,
+                  //   ), //<-- SEE HERE
+                  // ),
                 ),
-                // enabledBorder: OutlineInputBorder(
-                //   borderRadius: BorderRadius.circular(15),
-                //   borderSide: const BorderSide(
-                //     width: 1,
-                //     color: Colors.black,
-                //   ), //<-- SEE HERE
-                // ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: BlkTest(test: 'Back')),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all<Size>(
-                        Size(MediaQuery.of(context).size.height / 5,
-                            MediaQuery.of(context).size.width / 9),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: BlkTest(test: 'Back')),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(
+                          Size(MediaQuery.of(context).size.height / 5,
+                              MediaQuery.of(context).size.width / 9),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      context
-                          .read<WeatherBloc>()
-                          .add(WeatherDetialsEvent(cityName: _controller.text));
-                    },
-                    child: BlkTest(
-                      test: 'Search',
-                    )),
-              ],
-            ),
-            BlocBuilder<WeatherBloc, WeatherState>(
-              builder: (context, state) {
-                if (state is Initial) {
-                  return Center(
-                      child: Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height / 10),
-                    child: CircularProgressIndicator(),
-                  ));
-                }
-                if (state is ErrorDataState) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height / 2,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(child: Text(state.models)),
-                  );
-                }
-                if (state is WeateherDataState) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height / 2,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
+                      onPressed: () {
+                        context
+                            .read<WeatherBloc>()
+                            .add(WeatherDetialsEvent(cityName: _controller.text));
+                      },
+                      child: const BlkTest(
+                        test: 'Search',
+                      )),
+                ],
+              ),
+              BlocBuilder<WeatherBloc, WeatherState>(
+                builder: (context, state) {
+                  if (state is Initial) {
+                    return Center(
+                        child: Padding(
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 8),
-                      child: Column(
-                        children: [
-                          Text17(test: "City : ${state.model.name}"),
-                          Text17(test: "Temp : ${state.model.main.temp} K"),
-                          Text17(
+                          top: MediaQuery.of(context).size.height / 10),
+                      child: CircularProgressIndicator(),
+                    ));
+                  }
+                  if (state is ErrorDataState) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(child: Text(state.models)),
+                    );
+                  }
+                  if (state is WeateherDataState) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height / 8),
+                        child: Column(
+                          children: [
+                            Text17(test: "City : ${state.model.name}"),
+                            Text17(test: "Temp : ${state.model.main.temp.toInt()-273} \u2103 "),
+                            Text17(
+                                test:
+                                    "Description : ${state.model.weather[0].description}"),
+                            Text17(
                               test:
-                                  "Description : ${state.model.weather[0].description}"),
-                          Text17(
-                            test:
-                                "Humidity : ${state.model.main.humidity.toString()} %",
-                          )
-                        ],
+                                  "Humidity : ${state.model.main.humidity.toString()} %",
+                            )
+                          ],
+                        ),
                       ),
-                    ),
+                    );
+                  }
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width,
                   );
-                }
-                return Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: MediaQuery.of(context).size.width,
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

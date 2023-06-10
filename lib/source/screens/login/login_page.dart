@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../firebase_services/google_auth.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,19 +28,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
             child: Center(
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Padding(
               padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
+                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 7),
               child: Column(
                 children: [
                   Padding(
@@ -82,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.multiline,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter password';
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButtons(
                         test: 'Log in',
                         onTap: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: _userEmail.text.trim(),
@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
